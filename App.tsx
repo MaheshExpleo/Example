@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { View, Button, ToastAndroid } from 'react-native';
+import { CheckInternetStatus, ShowInternetStatus } from 'react-native-internet-checker';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function App() {
+const App = () => {
+  
+  const handleButton1Press = async () => {
+    const isConnected = await CheckInternetStatus();
+    if (isConnected) {
+      ToastAndroid.show('Connected to the internet', ToastAndroid.SHORT);
+    } else {
+      ToastAndroid.show('No internet connection', ToastAndroid.SHORT);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <SafeAreaProvider>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ShowInternetStatus />
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+        <View style={{ marginTop: 20 }}>
+          <Button title="Check Internet" onPress={handleButton1Press} />
+        </View>
+      </View>
+    </SafeAreaProvider>
+  );
+};
+
+export default App;
+
+
